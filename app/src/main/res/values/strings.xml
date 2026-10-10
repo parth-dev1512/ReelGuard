@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ReelGuard</string>
+    <string name="service_label">ReelGuard</string>
+    <string name="service_description">Counts Instagram Reels you swipe through and kicks you out after 4. Reads nothing else.</string>
+</resources>

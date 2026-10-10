@@ -16,7 +16,7 @@ class BlockActivity : Activity() {
         super.onCreate(savedInstanceState)
 
         val big = TextView(this).apply {
-            text = "Kaam karle bhsdk"
+            text = "Kaam karle"
             textSize = 44f
             setTypeface(typeface, Typeface.BOLD)
             setTextColor(Color.WHITE)

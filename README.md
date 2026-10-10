@@ -1,7 +1,7 @@
 # ReelGuard
 
 Swipe 4 Instagram Reels → Instagram gets sent to the background and a full-screen
-"Kaam karle bhsdk" shows up. Close it (button or back) and Google Tasks opens.
+"Kaam karle" ("get to work") shows up. Close it (button or back) and Google Tasks opens.
 Open Reels again within 5 minutes and you get kicked out instantly.
 
 ## Checking it works

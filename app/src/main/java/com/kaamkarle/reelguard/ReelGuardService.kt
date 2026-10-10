@@ -140,7 +140,7 @@ class ReelGuardService : AccessibilityService() {
             )
         }
         val big = TextView(this).apply {
-            text = "Kaam karle bhsdk"
+            text = "Kaam karle"
             textSize = 34f
             setPadding(0, 32, 0, 0)
             setTypeface(typeface, Typeface.BOLD)

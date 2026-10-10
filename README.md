@@ -1,7 +1,15 @@
 # ReelGuard
 
 Swipe 4 Instagram Reels → Instagram gets sent to the background and a full-screen
-"Kaam karle bhsdk" shows up. Open Reels again within 5 minutes and you get kicked out instantly.
+"Kaam karle bhsdk" shows up. Close it (button or back) and Google Tasks opens.
+Open Reels again within 5 minutes and you get kicked out instantly.
+
+## Checking it works
+
+Open ReelGuard after turning it on:
+- **Test block screen** shows the screen right away, so you know the screen part works.
+- **Last activity** updates live as you swipe Reels. If it never changes, Reels aren't being
+  detected — send the developer your Instagram version.
 
 ## Build
 
@@ -25,7 +33,7 @@ All in `ReelGuardService.kt`:
 - `COOLDOWN_MS` — instant kick-out window after a block (5 min)
 - `RESET_AFTER_MS` — counter starts over after this long away from Reels (30 min)
 
-The message itself is in `BlockActivity.kt`.
+The message and the Google Tasks redirect are in `showOverlay()` / `openGoogleTasks()` in the same file.
 
 ## If it stops detecting Reels
 

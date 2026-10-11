@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Lets ReelGuard turn itself back on after stepping aside for a payment app.
+         Only usable after a one-time grant over adb (see README). -->
+    <uses-permission
+        android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
 
     <!-- Needed on Android 11+ to find and open Google Tasks / Play Store. -->
     <queries>
@@ -36,5 +43,9 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/reel_guard_service" />
         </service>
+
+        <receiver
+            android:name=".TurnBackOnReceiver"
+            android:exported="false" />
     </application>
 </manifest>

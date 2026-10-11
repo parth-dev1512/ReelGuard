@@ -58,11 +58,28 @@ class ReelGuardService : AccessibilityService() {
 
     override fun onServiceConnected() {
         instance = this
+        PaymentPause.cancelScheduledTurnOn(this)
         saveDebug("Service running. Open Instagram Reels and swipe.")
+
+        // If we came back on while a payment app is still open, step aside again.
+        main.postDelayed({
+            val pkg = rootInActiveWindow?.packageName?.toString()
+            if (pkg != null && pkg in PaymentPause.PAYMENT_APPS) {
+                pauseFor(PaymentPause.PAYMENT_PAUSE_MS, "$pkg is still open")
+            }
+        }, 800)
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        if (event.packageName?.toString() != IG) return
+        val pkg = event.packageName?.toString() ?: return
+
+        // Payment apps refuse to work while we're on → switch off before they check.
+        if (pkg in PaymentPause.PAYMENT_APPS) {
+            pauseFor(PaymentPause.PAYMENT_PAUSE_MS, "$pkg opened")
+            return
+        }
+
+        if (pkg != IG) return
         if (overlay != null) return
         val now = SystemClock.elapsedRealtime()
 
@@ -230,6 +247,25 @@ class ReelGuardService : AccessibilityService() {
     }
 
     override fun onInterrupt() {}
+
+    /**
+     * Turns ReelGuard off and schedules it to turn back on after [ms].
+     * Used for payment apps and the main screen's Pause button.
+     */
+    fun pauseFor(ms: Long, reason: String) {
+        val mins = ms / 60_000
+        val autoBack = PaymentPause.canTurnBackOn(this)
+        if (autoBack) PaymentPause.scheduleTurnOn(this, ms)
+        saveDebug(
+            if (autoBack) "Paused ($reason). Back on in about $mins min."
+            else "Paused ($reason). Auto turn-on isn't set up, so turn ReelGuard back on in Accessibility."
+        )
+        overlay?.let {
+            try { (getSystemService(Context.WINDOW_SERVICE) as WindowManager).removeView(it) } catch (ignored: Exception) {}
+        }
+        overlay = null
+        disableSelf()
+    }
 
     /** Shows the block screen right now, without touching the cooldown. */
     fun showTest() {

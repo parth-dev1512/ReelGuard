@@ -25,6 +25,27 @@ go to the repo's Actions tab → latest run → download `ReelGuard-apk`.
    - Android 13+: if the toggle is greyed out, go to App info → ReelGuard → ⋮ → **Allow restricted settings**, then try again.
 3. Some phones (Xiaomi, Oppo, Vivo, Realme) kill background services. Set ReelGuard's battery to **No restrictions**.
 
+## Paytm, Google Pay, PhonePe and bank apps
+
+These apps refuse payments while any non-system accessibility service is on, as protection
+against remote-control scams. So ReelGuard switches itself **off** the moment one of them opens,
+then turns itself back **on** about 3 minutes later. If the payment app is still open when it comes
+back, it switches off again.
+
+Turning itself back on needs a one-time permission. Connect the phone to a laptop with USB
+debugging on (Xiaomi/Redmi/Poco: also turn on "USB debugging (Security settings)") and run:
+
+```
+adb shell pm grant com.kaamkarle.reelguard android.permission.WRITE_SECURE_SETTINGS
+```
+
+You only do this once per install. Without it, ReelGuard still gets out of Paytm's way, but you
+have to turn it back on yourself in Accessibility settings.
+
+The list of apps is `PAYMENT_APPS` in `PaymentPause.kt`. Add your bank's app there **and** to
+`packageNames` in `res/xml/reel_guard_service.xml`. For a one-off, use the **Pause for 10 min**
+button in ReelGuard.
+
 ## Tweaks
 
 All in `ReelGuardService.kt`:
@@ -39,4 +60,4 @@ The message and the Google Tasks redirect are in `showOverlay()` / `openGoogleTa
 
 Instagram sometimes renames its internal views. The service looks for view IDs containing
 `clips_viewer`. If an update breaks it, check the IDs with a layout inspector and update
-`REELS_VIEW_IDS`.
+`REELS_ID_HINTS`.
